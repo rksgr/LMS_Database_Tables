@@ -1,0 +1,320 @@
+https://docs.google.com/spreadsheets/d/1H7_VvIROWqaXbxJ8ZgGdMyR_AiHNRJCx4X1bKh38FIA/edit#gid=1566389866
+
+
+
+CREATE TABLE hired_candidate(id int,  first_name VARCHAR(55), middle_name VARCHAR(55), last_name VARCHAR(55), 
+email_id VARCHAR(55), hired_city VARCHAR(55), degree VARCHAR(55), 
+hired_date DATE, mobile_number INT(10), permanent_pincode INT(6), 
+hired_lab ENUM('BRIDGELABZ_DELHI', 'BRIDGELABZ_MUMBAI', 'BRIDGELABZ_PUNE', 'BRIDGELABZ_BENGALURU'), attitude VARCHAR(55), communication_remark VARCHAR(55), 
+knowledge_remark VARCHAR(55), aggregate_remark VARCHAR(55), status ENUM('PENDING', 'ACCEPTED', 'REJECTED'), 
+creator_stamp TIMESTAMP, creator_user_id INT)
+
+
+Definition and Usage
+
+The LOCALTIMESTAMP() function returns the current date and time.
+
+Note: The date and time is returned as "YYYY-MM-DD HH-MM-SS" (string) or as YYYYMMDDHHMMSS.uuuuuu (numeric).
+Syntax: LOCALTIMESTAMP()
+
+Fellowship candidate
+ CREATE TABLE fellowship_candidate(id INT , CIC_ID VARCHAR(25), first_name VARCHAR(55), middle_name VARCHAR(50) , last_name VARCHAR(50), 
+email_id VARCHAR(50), hired_city VARCHAR(50), degree VARCHAR(50), 
+hired_date DATE, mobile_number INT(10),permanent_pincode INT(6), 
+hired_lab SET('BRIDGELABZ_DELHI', 'BRIDGELABZ_MUMBAI', 'BRIDGELABZ_PUNE', 'BRIDGELABZ_BENGALURU'), Attitude VARCHAR(50), communication_remark VARCHAR(50), 
+knowledge_remark VARCHAR(50), aggregate_remark VARCHAR(50),
+creator_stamp DATETIME, creator_user_id INT, birth_date DATE, 
+is_birth_date_verified bool, parent_name VARCHAR(50), parent_occupation VARCHAR(50),
+parents_mobile_number INT(10), parents_annual_salary INT(10),
+local_address VARCHAR(55), permanent_address VARCHAR(55), photo_path VARCHAR(50),
+joining_date DATE, candidate_status SET('Pending', 'Accepted', 'Rejected'), personal_information VARCHAR(55),
+bank_information VARCHAR(50), educational_information VARCHAR(50),
+document_status SET('NOT SUBMITTED','SUBMITTED AND VERIFIFED','SUBMITTED BUT VERIFIFICATION PENDING'), remark VARCHAR(50));
+
+
+Candidate bank Details 
+CREATE TABLE candidate_bank_details(id INT ,candidate_id VARCHAR(25), name VARCHAR(55) , account_number BIGINT(21), 
+  is_account_num_verified BOOLEAN, ifsc_code VARCHAR(25),
+  is_ifsc_code_verified BOOLEAN, pan_number VARCHAR(10),
+  is_pan_number_verified BOOLEAN, addhaar_num BIGINT(16), 
+  is_addhaar_num_verified BOOLEAN, creator_stamp TIMESTAMP, 
+  creator_user_id INT);
+
+candidate qualification 
+CREATE TABLE candidate_qualification(id  INT, candidate_id VARCHAR(25), diploma VARCHAR(55) , degree_name VARCHAR(55) 
+  ,is_degree_name_verified BOOL, employee_discipline VARCHAR(55),
+  is_employee_discipline_verified BOOL, passing_year INT(4),
+  is_passing_year_verified BOOL, aggr_per FLOAT(4),
+  is_aggr_per_verified BOOL, final_year_per FLOAT(4),
+  is_final_year_per_verified BOOL, training_institute VARCHAR(55),
+  is_training_institute_verified BOOL, training_duration_month INT(2),
+  is_training_duration_month_verified BOOL, other_training VARCHAR(55),
+  is_other_training_verified BOOL , creator_stamp TIMESTAMP, 
+  creator_user_id INT);
+
+candidate documents
+CREATE TABLE candidate_documents( id INT, candidate_id VARCHAR(25), doc_type SET('PAN card','Aadhar Card','any certificate') , doc_path VARCHAR(50),
+  status SET('pending','verified'), creator_stamp TIMESTAMP, creator_user_id INT);
+
+
+company 
+CREATE TABLE company( id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(55), address VARCHAR(55), location VARCHAR(55), 
+	status SET('ACTIVE','INACTIVE'), creator_stamp TIMESTAMP,
+  	creator_user INT);
+
+
+Maker Program
+CREATE TABLE maker_program(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, program_name VARCHAR(50), program_type VARCHAR(50), 
+ program_link VARCHAR(50), tech_stack_id VARCHAR(50),
+ tech_type_id VARCHAR(50), is_program_approved BOOL,
+ description VARCHAR(50), status ENUM('COMPLETED','NOT COMPLETED'), creator_stamp TIMESTAMP,
+ creator_user_id INT);
+
+Tech stack
+CREATE TABLE tech_stack(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, tech_name ENUM('Java','Mobile','PHP','Python') , image_path VARCHAR(50), framework VARCHAR(50), 
+ cur_status VARCHAR(50), creator_stamp TIMESTAMP, creator_user INT);
+
+Tech Type
+CREATE TABLE tech_type(id INT,type_name ENUM('FULLSTACK','FRONTEND','BACKEND'),
+ cur_status VARCHAR(50), creator_stamp TIMESTAMP, 
+ creator_user INT);
+
+Lab 
+CREATE TABLE lab(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50), location VARCHAR(50), address VARCHAR(50)  
+ ,Status SET('FULL','NOT FULL'), creator_stamp TIMESTAMP, creator_user INT);
+
+
+LAb threshold
+CREATE TABLE lab_threshold(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, lab_id INT, lab_capacity INT, lead_threshold INT,
+ ideation_engg_threshold INT, buddy_engg_threshold INT,
+ Status VARCHAR(50) , creator_stamp TIMESTAMP,creator_user INT, CONSTRAINT fk_lab_threshold FOREIGN KEY(lab_id) REFERENCES lab(id));
+
+Mentor 
+CREATE TABLE mentor(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50), 
+mentor_type ENUM('PRACTICE_HEAD','LEAD_MENTOR','SUPPORT_MENTOR','BUDDY_MENTOR'), 
+lab_id INT, status ENUM('ACTIVE','INACTIVE') , creator_stamp TIMESTAMP, creator_user INT,
+CONSTRAINT fk_mentor FOREIGN KEY (lab_id) REFERENCES lab(id));
+
+Mentor Ideation Map
+CREATE TABLE mentor_ideation_map(id INT, parent_mentor_id INT, mentor_id INT, status VARCHAR(5), creator_stamp TIMESTAMP, 
+creator_user INT, CONSTRAINT fk_mentor_ideation_map_1 FOREIGN KEY (mentor_id) REFERENCES  mentor(id));
+
+
+
+Company Requirement
+CREATE TABLE company_requirement(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, company_id INT, requested_month DATE,city VARCHAR(50),
+  is_doc_verifrication BOOL, requirement_doc_path VARCHAR(50), no_of_engg INT, 
+  tech_stack_id INT, tech_type_id INT, maker_program_id INT, 
+  lead_id INT, ideation_engg_id INT, buddy_engg_id INT, special_remark VARCHAR(50), 
+  status VARCHAR(50), creator_stamp TIMESTAMP, creator_user INT,
+ CONSTRAINT fk_company_requirement_1 FOREIGN KEY(company_id) REFERENCES company(id),
+CONSTRAINT fk_company_requirement_2 FOREIGN KEY(tech_stack_id) REFERENCES tech_stack(id),
+CONSTRAINT fk_company_requirement_3 FOREIGN KEY(tech_type_id) REFERENCES tech_type(id),
+CONSTRAINT fk_company_requirement_4 FOREIGN KEY(maker_program_id) REFERENCES maker_program(id));
+
+
+Candidate Stack Assignment
+CREATE TABLE candidate_stack_assignment(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, requirement_id INT, candidate_id VARCHAR(50), 
+assign_date DATE, complete_date DATE, status VARCHAR(50), creator_stamp TIMESTAMP,creator_user INT,
+CONSTRAINT fk_candidate_stack_assignment_1 FOREIGN KEY(requirement_id) REFERENCES company_requirement(id),
+CONSTRAINT fk_candidate_stack_assignment_2 FOREIGN KEY(candidate_id) REFERENCES fellowship_candidate(candidate_id));
+
+INSERT INTO user_details(1,'user1@gmail.com',"altaf","hussain","password",98745630, 1, SELECT TIMESTAMP("28-08-22"), 1);
+
+ALTER TABLE user_details MODIFY creator_stamp TIMESTAMP;
+ALTER TABLE user_details MODIFY contact_number VARCHAR(11);
+
+INSERT INTO user_details VALUES  (1,'user1@gmail.com',"altaf","hussain","password",'9874561230', 1, TIMESTAMP("2022-08-28"), 1);
+INSERT INTO user_details VALUES  (2,'user2@gmail.com',"niraj","haqqani","password",'9874561231', 1, TIMESTAMP("2022-08-27"), 2);
+INSERT INTO user_details VALUES  (3,'user3@gmail.com',"mir","anwar","password",'9874561232', 1, TIMESTAMP("2022-08-26"), 3);
+INSERT INTO user_details VALUES  (4,'user4@gmail.com',"ashok","kumar","password",'9874561233', 1, TIMESTAMP("2022-08-25"), 4);
+INSERT INTO user_details VALUES  (5,'user5@gmail.com',"aman","paswan","password",'9874561234', 1, TIMESTAMP("2022-08-24"), 5);
+
+
+INSERT INTO company VALUES(1, 'Microsoft','Palo Alto','Bengaluru', 'ACTIVE', TIMESTAMP("2022-08-25"),2);
+INSERT INTO company VALUES(2, 'Oracle','Indonesia','Singrauli', 'ACTIVE', TIMESTAMP("2022-08-26"),2);
+INSERT INTO company VALUES(3, 'Apple','Seattle','Pune', 'ACTIVE', TIMESTAMP("2022-08-27"),1);
+INSERT INTO company VALUES(4, 'Microsoft2','Palo Alto2','Bengaluru', 'ACTIVE', TIMESTAMP("2022-07-01"),2);
+INSERT INTO company VALUES(5, 'Microsoft3','Palo Alto3','Bengaluru', 'ACTIVE', TIMESTAMP("2022-07-02"),2);
+INSERT INTO company VALUES(6, 'Microsoft4','Palo Alto4','Bengaluru', 'ACTIVE', TIMESTAMP("2022-07-03"),2);
+INSERT INTO company VALUES(7, 'Microsoft5','Palo Alto5','Bengaluru', 'ACTIVE', TIMESTAMP("2022-07-04"),2);
+INSERT INTO company VALUES(8, 'Microsoft6','Palo Alto6','Bengaluru', 'ACTIVE', TIMESTAMP("2022-07-05"),2);
+INSERT INTO company VALUES(9, 'Microsoft7','Palo Alto7','Bengaluru', 'ACTIVE', TIMESTAMP("2022-07-06"),2);
+INSERT INTO company VALUES(10, 'Microsof8','Palo Alto8','Bengaluru', 'ACTIVE', TIMESTAMP("2022-07-07"),2);
+INSERT INTO company VALUES(11, 'Microsoft9','Palo Alto9','Bengaluru', 'ACTIVE', TIMESTAMP("2022-07-08"),2);
+INSERT INTO company VALUES(12, 'Microsoft10','Palo Alto10','Bengaluru', 'ACTIVE', TIMESTAMP("2022-07-09"),2);
+INSERT INTO company VALUES(13, 'Microsoft11','Palo Alto11','Bengaluru', 'ACTIVE', TIMESTAMP("2022-07-10"),2);
+INSERT INTO company VALUES(14, 'Microsoft12','Palo Alto12','Bengaluru', 'ACTIVE', TIMESTAMP("2022-07-11"),2);
+INSERT INTO company VALUES(15, 'Microsoft13','Palo Alto13','Bengaluru', 'ACTIVE', TIMESTAMP("2022-07-12"),2);
+INSERT INTO company VALUES(16, 'Microsoft14','Palo Alt14','Bengaluru', 'ACTIVE', TIMESTAMP("2022-07-13"),2);
+
+
+INSERT INTO mentor VALUES(1, 'mentor1','LEAD_MENTOR',1, 'ACTIVE', TIMESTAMP("2022-07-01"), 3);
+
+
+INSERT INTO lab VALUES((2,"BridgeLabz_Pune_2", "Pune", "Hadapsar" , "FULL",TIMESTAMP("2022-07-02"), 3);
+INSERT INTO lab VALUES(3,"BridgeLabz_Pune_3", "Pune", "Viman Nagar" , "FULL",TIMESTAMP("2022-07-03"), 3);
+INSERT INTO lab VALUES(4,"BridgeLabz_Pune_4", "Pune", "Koregaon Park" , "NOT FULL",TIMESTAMP("2022-07-04"), 3);
+INSERT INTO lab VALUES(5,"BridgeLabz_Bombay_1", "Bombay", "Powai" , "FULL",TIMESTAMP("2022-07-05"), 3);
+INSERT INTO lab VALUES(6,"BridgeLabz_Bombay_2", "Bombay", "Andheri" , "NOT FULL",TIMESTAMP("2022-07-06"), 3);
+INSERT INTO lab VALUES(7,"BridgeLabz_Bombay_3","Bombay", "Juhu" , "FULL",TIMESTAMP("2022-07-07"), 3);
+INSERT INTO lab VALUES(8,"BridgeLabz_Bombay_4","Bombay", "Santa Cruz" , "FULL",TIMESTAMP("2022-07-08"), 3);
+INSERT INTO lab VALUES(9,"BridgeLabz_Bombay_5","Bombay", "Colaba" , "NOT FULL",TIMESTAMP("2022-07-09"), 3);
+INSERT INTO lab VALUES(10,"BridgeLabz_Bengaluru_1","Bengaluru", "CR colony" , "NOT FULL",TIMESTAMP("2022-07-10"), 3);
+INSERT INTO lab VALUES(11,"BridgeLabz_Bengaluru_2","Bengaluru", "Whitefield" , "NOT FULL",TIMESTAMP("2022-07-11"), 3);
+INSERT INTO lab VALUES(12,"BridgeLabz_Bengaluru_3","Bengaluru", "Mallepalli" , "NOT FULL",TIMESTAMP("2022-07-12"), 3);
+INSERT INTO lab VALUES(13,"BridgeLabz_Bengaluru_4","Bengaluru", "Kempepalli" , "FULL",TIMESTAMP("2022-07-13"), 3);
+INSERT INTO lab VALUES(14,"BridgeLabz_Bengaluru_5","Bengaluru", "Rajaji Nagar" , "FULL",TIMESTAMP("2022-07-14"), 3);
+INSERT INTO lab VALUES(15,"BridgeLabz_Singrauli_1","Singrauli", "Partali" , "FULL",TIMESTAMP("2022-07-15"), 3);
+
+
+
+
+INSERT INTO mentor VALUES(1, 'mentor1','LEAD_MENTOR',1, 'ACTIVE', TIMESTAMP("2022-07-01"), 3);
+INSERT INTO mentor VALUES(2, 'mentor2','LEAD_MENTOR',2, 'ACTIVE', TIMESTAMP("2022-07-02"), 3);
+INSERT INTO mentor VALUES(3, 'mentor3','SUPPORT_MENTOR',3, 'ACTIVE', TIMESTAMP("2022-07-03"), 3);
+INSERT INTO mentor VALUES(4, 'mentor4', 'SUPPORT_MENTOR',4, 'ACTIVE', TIMESTAMP("2022-07-04"), 3);
+INSERT INTO mentor VALUES(5, 'mentor5','SUPPORT_MENTOR',5, 'ACTIVE', TIMESTAMP("2022-07-05"), 3);
+INSERT INTO mentor VALUES(6, 'mentor6', 'SUPPORT_MENTOR',6, 'ACTIVE', TIMESTAMP("2022-07-06"), 3);
+INSERT INTO mentor VALUES(7, 'mentor7', 'SUPPORT_MENTOR',1, 'ACTIVE', TIMESTAMP("2022-07-07"), 3);
+INSERT INTO mentor VALUES(8, 'mentor8', 'BUDDY_MENTOR' , 2, 'ACTIVE', TIMESTAMP("2022-07-08"), 3);
+INSERT INTO mentor VALUES(9, 'mentor9','SUPPORT_MENTOR', 3, 'ACTIVE', TIMESTAMP("2022-07-09"), 3);
+INSERT INTO mentor VALUES(10, 'mentor10', 'BUDDY_MENTOR',4, 'ACTIVE', TIMESTAMP("2022-07-10"), 3);
+INSERT INTO mentor VALUES(11, 'mentor11', 'PRACTICE_HEAD',1, 'ACTIVE', TIMESTAMP("2022-07-11"), 3);
+INSERT INTO mentor VALUES(12, 'mentor12', 'LEAD_MENTOR' ,2, 'ACTIVE', TIMESTAMP("2022-07-12"), 3);
+INSERT INTO mentor VALUES(13, 'mentor13',  'BUDDY_MENTOR',7, 'ACTIVE', TIMESTAMP("2022-07-13"), 3);
+INSERT INTO mentor VALUES(14, 'mentor14','LEAD_MENTOR',7, 'ACTIVE', TIMESTAMP("2022-07-14"), 3);
+INSERT INTO mentor VALUES(15, 'mentor15','BUDDY_MENTOR',9, 'ACTIVE', TIMESTAMP("2022-07-15"), 3);
+INSERT INTO mentor VALUES(16, 'mentor16','LEAD_MENTOR',9, 'ACTIVE', TIMESTAMP("2022-07-16"), 3);
+INSERT INTO mentor VALUES(17, 'mentor17','BUDDY_MENTOR',8, 'ACTIVE', TIMESTAMP("2022-07-17"), 3);
+INSERT INTO mentor VALUES(18, 'mentor18','SUPPORT_MENTOR',10, 'ACTIVE', TIMESTAMP("2022-07-18"), 3);
+
+
+
+INSERT INTO tech_stack VALUES(1, 'Java', 'image_path_java','Spring', 'Active', TIMESTAMP("2022-07-01"), 1);
+INSERT INTO tech_stack VALUES(2, 'Mobile', 'image_path_mobile','Android', 'Active', TIMESTAMP("2022-07-02"), 1);
+INSERT INTO tech_stack VALUES(3, 'PHP', 'image_path_php','Laravel', 'Inactive', TIMESTAMP("2022-07-03"), 1);
+INSERT INTO tech_stack VALUES(4, 'Python', 'image_path_python','Django', 'Active', TIMESTAMP("2022-07-04"), 1);
+
+
+Mentor Tech Stack
+CREATE TABLE mentor_tech_stack(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, mentor_id INT, tech_stack_id INT,
+status VARCHAR(50), creator_stamp TIMESTAMP, creator_user INT,
+CONSTRAINT fk_mentor_tech_stack_1 FOREIGN KEY (mentor_id) REFERENCES mentor(id),
+CONSTRAINT fk_mentor_tech_stack_2 FOREIGN KEY (tech_stack_id) REFERENCES tech_stack(id));
+
+
+
+INSERT INTO fellowship_candidate VALUES( 1, 'CIC072022-1000', 'first_name1', 'middle_name1' , 'last_name1', 
+'candidate1@gmail.com', 'Pune', 'BE', DATE("2022-07-01"),'9874561230', 456123, 
+'BRIDGELABZ_PUNE', 'fine_attitude_1', 'communication_remark1', 
+'knowledge_remark_1', 'aggregate_remark_1', TIMESTAMP("2022-7-01"), 1, DATE("2000-01-01"), 
+true, 'parent_name_1', 'parent_occupation_1',
+'9874563210', 999999, 'local_address_1', 'permanent_address_1', 'photo_path_1',
+DATE("2022-07-02"), 'Accepted',  'personal_information_1',
+'bank_information_1', 'educational_information_1','NOT SUBMITTED', 'remark_1');
+
+INSERT INTO fellowship_candidate VALUES( 2, 'CIC072022-1001', 'first_name2', 'middle_name2' , 'last_name2', 
+'candidate2@gmail.com', 'Pune', 'BE', DATE("2022-07-02"),'9874563230', 456423, 
+'BRIDGELABZ_PUNE', 'fine_attitude_2', 'communication_remark2', 
+'knowledge_remark_2', 'aggregate_remark_2', TIMESTAMP("2022-7-02"), 1, DATE("2000-01-02"), 
+true, 'parent_name_2', 'parent_occupation_2',
+'9874563810', 899999, 'local_address_2', 'permanent_address_2', 'photo_path_2',
+DATE("2022-07-03"), 'Accepted',  'personal_information_2',
+'bank_information_2', 'educational_information_2','SUBMITTED BUT VERIFIFICATION PENDING', 'remark_2');
+
+INSERT INTO fellowship_candidate VALUES( 3, 'CIC072022-1002', 'first_name3', 'middle_name3' , 'last_name3', 
+'candidate3@gmail.com', 'Thane', 'BE', DATE("2022-07-03"),'9884563230', 756423, 
+'BRIDGELABZ_MUMBAI', 'fine_attitude_3', 'communication_remark3', 
+'knowledge_remark_3', 'aggregate_remark_3', TIMESTAMP("2022-7-03"), 1, DATE("2000-01-03"), 
+true, 'parent_name_3', 'parent_occupation_3',
+'9874568810', 879999, 'local_address_3', 'permanent_address_3', 'photo_path_3',
+DATE("2022-07-04"), 'Accepted',  'personal_information_3',
+'bank_information_3', 'educational_information_3','SUBMITTED BUT VERIFIFICATION PENDING', 'remark_3');
+
+INSERT INTO fellowship_candidate VALUES( 4, 'CIC072022-1003', 'first_name4', 'middle_name4' , 'last_name4', 
+'candidate4@gmail.com', 'Satara', 'BE', DATE("2022-07-04"),'9874551230', 456143, 
+'BRIDGELABZ_MUMBAI', 'fine_attitude_4', 'communication_remark4', 
+'knowledge_remark_4', 'aggregate_remark_4', TIMESTAMP("2022-7-04"), 1, DATE("2000-01-04"), 
+true, 'parent_name_4', 'parent_occupation_4',
+'9874563214', 999994, 'local_address_4', 'permanent_address_4', 'photo_path_4',
+DATE("2022-07-04"), 'Accepted',  'personal_information_4',
+'bank_information_4', 'educational_information_4','NOT SUBMITTED', 'remark_4');
+
+INSERT INTO fellowship_candidate VALUES( 5, 'CIC072022-1005', 'first_name5', 'middle_name5' , 'last_name5', 
+'candidate5@gmail.com', 'Imphal', 'MCA', DATE("2022-07-05"),'9574561230', 556123, 
+'BRIDGELABZ_DELHI', 'fine_attitude_5', 'communication_remark5', 
+'knowledge_remark_5', 'aggregate_remark_5', TIMESTAMP("2022-7-05"), 5, DATE("2000-01-05"), 
+true, 'parent_name_5', 'parent_occupation_5',
+'9874563215', 999995, 'local_address_5', 'permanent_address_5', 'photo_path_5',
+DATE("2022-07-05"), 'Accepted',  'personal_information_5',
+'bank_information_5', 'educational_information_5','NOT SUBMITTED', 'remark_5');
+
+INSERT INTO fellowship_candidate VALUES( 6, 'CIC072022-1006', 'first_name6', 'middle_name6' , 'last_name6', 
+'candidate6@gmail.com', 'Mussorrie', 'BCA', DATE("2022-07-06"),'8874561230', 756123, 
+'BRIDGELABZ_DELHI', 'fine_attitude_6', 'communication_remark6', 
+'knowledge_remark_6', 'aggregate_remark_6', TIMESTAMP("2022-7-06"), 1, DATE("2000-01-06"), 
+true, 'parent_name_6', 'parent_occupation_6',
+'9874563610', 969999, 'local_address_6', 'permanent_address_6', 'photo_path_6',
+DATE("2022-07-06"), 'Accepted',  'personal_information_6',
+NULL , 'educational_information_6','NOT SUBMITTED', 'remark_6');
+
+INSERT INTO tech_type VALUES(1, 'FULLSTACK', 'Active', TIMESTAMP("2022-07-01"), 3);
+INSERT INTO tech_type VALUES(2, 'FULLSTACK', 'Active', TIMESTAMP("2022-07-01"), 3);
+INSERT INTO tech_type VALUES(3, 'FRONTEND', 'Active', TIMESTAMP("2022-07-01"), 3);
+INSERT INTO tech_type VALUES(4, 'FRONTEND', 'Active', TIMESTAMP("2022-07-02"), 3);
+INSERT INTO tech_type VALUES(5, 'BACKEND', 'Active', TIMESTAMP("2022-07-03"), 3);
+
+INSERT INTO maker_program VALUES(1, 'RFP', 'Intermediate','program_link_1', 'Java', 'FULLSTACK', true, 'description_1', 'NOT COMPLETED', TIMESTAMP("2022-07-26"), 1);
+
+
+INSERT INTO company_requirement VALUES(1, 1, DATE("2022-01-01"), "Kashmir", true, "requirement_doc_path_1", 20, 1, 1, 1, 1, 1, 1, "special_remark_1", 
+ "status_1", TIMESTAMP("2022-07-01"), 1);
+
+
+INSERT INTO candidate_stack_assignment VALUES(1, 1, 'CIC072022-1000', DATE("2022-07-01"), DATE("2022-09-01"), "Incomplete", TIMESTAMP("2022-07-01"),1);
+INSERT INTO candidate_stack_assignment VALUES(2, 1, 'CIC072022-1001', DATE("2022-07-01"), DATE("2022-09-01"), "Incomplete", TIMESTAMP("2022-07-01"),1);
+
+
+INSERT INTO mentor_tech_stack VALUES(1,1,1,"ACTIVE", TIMESTAMP("2022-07-01"),1);
+INSERT INTO mentor_tech_stack VALUES(2,2,1,"ACTIVE", TIMESTAMP("2022-07-01"),1);
+INSERT INTO mentor_tech_stack VALUES(3,3,1,"ACTIVE", TIMESTAMP("2022-07-02"),1);
+INSERT INTO mentor_tech_stack VALUES(4,4,2,"ACTIVE", TIMESTAMP("2022-07-02"),3);
+INSERT INTO mentor_tech_stack VALUES(5,5,2,"ACTIVE", TIMESTAMP("2022-07-03"),2);
+INSERT INTO mentor_tech_stack VALUES(6,6,3,"ACTIVE", TIMESTAMP("2022-07-03"),3);
+INSERT INTO mentor_tech_stack VALUES(7,7,3,"ACTIVE", TIMESTAMP("2022-07-03"),1);
+INSERT INTO mentor_tech_stack VALUES(8,8,2,"ACTIVE", TIMESTAMP("2022-07-02"),1);
+
+
+INSERT INTO candidate_qualification VALUES(1, 'CIC072022-1002', 
+
+QUERY 1:
+Find all candidates having java technology.
+SELECT * FROM candidate_stack_assignment WHERE requirement_id = (SELECT id FROM company_requirement WHERE tech_stack_id =
+ (SELECT id FROM tech_stack WHERE tech_name='Java') ) ;
+
+2- find all mentors and ideations have java technology 
+SELECT * FROM mentor_tech_stack WHERE tech_stack_id = (SELECT id FROM tech_stack WHERE tech_name = 'Java');
+
+8. Find names of candidate who did not submit documents?
+
+SELECT first_name, middle_name, last_name FROM fellowship_candidate WHERE document_status='NOT SUBMITTED';
+
+9- Find name of candidates who did not submit bank details?
+SELECT first_name, middle_name, last_name FROM fellowship_candidate WHERE bank_information is NULL;
+
+
+10-find name of candidates which is joined in dec month
+
+
+
+
+
+
+
+
+
+
+
+
+
